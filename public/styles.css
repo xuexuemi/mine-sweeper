@@ -1,0 +1,13 @@
+.row {
+  margin: 0px;
+  padding: 0px;
+  height: 30px;
+}
+
+.cell {
+  height: 30px;
+  width: 30px;
+  margin: 0px;
+  display: inline-block;
+  /* background-color: grey; */
+}
