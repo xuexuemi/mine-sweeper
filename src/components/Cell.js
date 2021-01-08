@@ -8,26 +8,26 @@ function Cell(props) {
 
     switch (props.status) {
       case 2:
-        imgURL.current = "/images/Minesweeper_0.svg.png";
+        imgURL.current = process.env.PUBLIC_URL + "/images/Minesweeper_0.svg.png";
         break;
       case 1:
-        imgURL.current = "/images/Minesweeper_unopened_square.svg.png";
+        imgURL.current = process.env.PUBLIC_URL + "/images/Minesweeper_unopened_square.svg.png";
         break;
       case 0:
-        imgURL.current = "/images/Minesweeper_" + props.tag + ".svg.png";
+        imgURL.current = process.env.PUBLIC_URL + "/images/Minesweeper_" + props.tag + ".svg.png";
         break;
       case -2: // game over
         if (props.tag === 9) {
-          imgURL.current = "/images/Minesweeper_9.svg.png";
+          imgURL.current = process.env.PUBLIC_URL + "/images/Minesweeper_9.svg.png";
           bgColor = "red"
         }
         break;
       case -4:
-        imgURL.current = "/images/Minesweeper_9w.svg.png";
+        imgURL.current = process.env.PUBLIC_URL + "/images/Minesweeper_9w.svg.png";
         break;
 
       case -1: case -5:
-        imgURL.current = "/images/Minesweeper_flag.svg.png";
+        imgURL.current = process.env.PUBLIC_URL + "/images/Minesweeper_flag.svg.png";
         break;
       
       default:
