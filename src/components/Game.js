@@ -1,7 +1,23 @@
 import React, { useState, useRef, useEffect } from "react";
 import Board from "./Board";
+import Button from '@material-ui/core/Button';
+import { styled } from '@material-ui/core/styles';
+import { green } from "@material-ui/core/colors";
+
+
+const MyButton = styled(Button)({
+  fontSize: "20px",
+  fontFamily: 'Architects Daughter',
+  padding: "0px 10px",
+  marginBottom: "18px",
+});
+
 
 function Game() {
+
+  const [result, setResult] = useState("");
+  const [resultColor, setResultColor] = useState("white");
+
   const neighbors = [
     [1, 0],
     [1, -1],
@@ -18,13 +34,13 @@ function Game() {
   const timerID = useRef(null);
   const [time, setTime] = useState(0);
 
-  const [gameMode, setGameMode] = useState("beginner");
-  const [numRows, setNumRows] = useState(9);
-  const [numCols, setNumCols] = useState(9);
-  const [numMines, setNumMines] = useState(10);
+  const [gameMode, setGameMode] = useState("intermediate");
+  const [numRows, setNumRows] = useState(16);
+  const [numCols, setNumCols] = useState(16);
+  const [numMines, setNumMines] = useState(40);
 
-  const [numMinesLeft, setNumMinesLeft] = useState(10);
-  const [numFlagsLeft, setNumFlagsLeft] = useState(10);
+  const [numMinesLeft, setNumMinesLeft] = useState(40);
+  const [numFlagsLeft, setNumFlagsLeft] = useState(40);
 
   const [cellStatus, setCellStatus] = useState([]);
   const [cellTags, setCellTags] = useState([]);
@@ -135,6 +151,8 @@ function Game() {
     setTime(0);
     setNumFlagsLeft(numMines);
     setNumMinesLeft(numMines);
+    setResult("");
+    setResultColor("white");
   }
 
   function gameStart() {
@@ -146,24 +164,31 @@ function Game() {
     }
   }
 
-  function gameOver(content) {
+  function gameOver(win, rowIndex, columnIndex) {
     clearInterval(timerID.current);
-    console.log(content);
+    
+    if (win) {
+      setResult("Congratulations! You win!");
+      setResultColor("green");
+    } else {
+      setResult("Bomb! Game over!");
+      setResultColor("red");
+    }
 
     // lock the board
     setCellStatus(prevStatus => {
       var status = prevStatus.slice();
       status = status.map((statusRow, i) => {
         return statusRow.map((statusCell, j) => {
-          if (statusCell != 0) {
+          if (statusCell !== 0) {
             if (cellTags[i][j] === 9) {
-              if (statusCell == -1) {
+              if (statusCell === -1) {
                 return -3;
               } else {
                 return 0;
               }
             } else {
-              if (statusCell == -1) {
+              if (statusCell === -1) {
                 return -4;
               } else {
                 return -2;
@@ -175,26 +200,39 @@ function Game() {
         });
       });
 
+      if (numMinesLeft === 1) {
+        status[rowIndex][columnIndex] = -5;
+      } else {
+        status[rowIndex][columnIndex] = -2;
+      }
+      
+
       return status;
     });
   }
 
   return (
     <div>
-      <form onChange={initBoard}>
-        <input type="radio" id="beginner" value="beginner" checked={gameMode === "beginner"} />
-        <label for="beginner">Beginner</label>
+      <div className="top-bar center">
+        <form  onChange={initBoard}>
+          <input className="top-bar-radio-first" type="radio" id="beginner" value="beginner" checked={gameMode === "beginner"} />
+          <label for="beginner">Beginner</label>
 
-        <input type="radio" id="intermediate" value="intermediate" checked={gameMode === "intermediate"} />
-        <label for="intermediate">Intermediate</label>
+          <input className="top-bar-radio" type="radio" id="intermediate" value="intermediate" checked={gameMode === "intermediate"} />
+          <label for="intermediate">Intermediate</label>
 
-        <input type="radio" id="expert" value="expert" checked={gameMode === "expert"} />
-        <label for="expert">Expert</label>
-      </form>
-
-      <input type="text" value={numFlagsLeft} />
-      <button onClick={newGame}>Reset</button>
-      <input type="text" value={time} />
+          <input className="top-bar-radio" type="radio" id="expert" value="expert" checked={gameMode === "expert"} />
+          <label for="expert">Expert</label>
+        </form>
+      </div>
+      <div className="center">
+        <span>(flags)</span>
+        <span className="counter" style={{textAlign: "start"}}>{numFlagsLeft}</span>
+        {/* <button className="reset-button" onClick={newGame}>New Game</button> */}
+        <MyButton variant="contained" onClick={newGame}>New Game</MyButton>
+        <span className="counter" style={{textAlign: "end"}}>{time}</span>
+        <span>(sec)</span>
+      </div>
 
       <Board
         neighbors={neighbors}
@@ -209,6 +247,8 @@ function Game() {
         handleGameStart={gameStart}
         handleGameOver={gameOver}
       />
+
+      <h2 style={{backgroundColor: resultColor}}>{result}</h2>
     </div>
   );
 }

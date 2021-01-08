@@ -26,7 +26,7 @@ function Cell(props) {
         imgURL.current = "/images/Minesweeper_9w.svg.png";
         break;
 
-      case -1:
+      case -1: case -5:
         imgURL.current = "/images/Minesweeper_flag.svg.png";
         break;
       

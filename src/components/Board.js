@@ -16,8 +16,7 @@ function Board(props) {
       if (status[rowIndex][columnIndex] === 1) {
         if (props.cellTags[rowIndex][columnIndex] === 9) {
           // game over
-          props.handleGameOver("Bomb! Game over!");
-          status[rowIndex][columnIndex] = -2;
+          props.handleGameOver(false,rowIndex, columnIndex);
         } else {
           var stack = [[rowIndex, columnIndex]];
 
@@ -104,7 +103,7 @@ function Board(props) {
           props.setNumMinesLeft(c => {
             // check if game is over
             if (c === 1) {
-              props.handleGameOver("Congratulations! You win the game!");
+              props.handleGameOver(true, rowIndex, columnIndex);
             }
 
             return c - 1;
@@ -120,6 +119,7 @@ function Board(props) {
       }
       return status;
     });
+    
   }
 
   function revealNeighbors(rowIndex, columnIndex) {
@@ -171,8 +171,7 @@ function Board(props) {
           }
 
           if (mineIndex.length > 0) {
-            props.handleGameOver("Bomb! Game over!");
-            status[mineIndex[0]][mineIndex[1]] = -2;
+            props.handleGameOver(false,mineIndex[0],mineIndex[1]);
           }
         }
       }
@@ -181,7 +180,7 @@ function Board(props) {
   }
 
   return (
-    <div>
+    <div className="board">
       
       {props.cellTags.map((rowTags, rowIndex) => {
         return (
