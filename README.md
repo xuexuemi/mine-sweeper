@@ -6,7 +6,7 @@ A web app of classic mine sweeper based on React.
 + Implemented the functionality of mine sweeper game using React.
 
 ## Demo
-Click here to give it a try!
+Click [here](https://xuexuemi.github.io/mine-sweeper/) to give it a try!
 
 
 ![](demo.gif)
